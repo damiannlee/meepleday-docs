@@ -24,3 +24,15 @@
 
 - `/api/admin/**` 무인증은 **로컬 개발 한정** — 공개 배포가 인증 완비 후라([ADR-0005](0005-deployment-target.md)) **대중 노출 창이 없음** → 부채 위험 낮음. 단 배포 전 잠금 완료는 필수.
 - 제보자 텍스트 필드(`submitterName`/`submitterEmail`)는 인증 도입 시 User FK로 마이그레이션 필요.
+
+## 개정 (2026-07-23) — 부채 해소 완료, 단 제보는 익명 유지
+
+- **상태 갱신: 인증은 구현 완료** (커밋 9597909). 이 ADR이 기록한 "지연"은 종료됨.
+  - `/api/admin/**` 은 `hasRole("ADMIN")`으로 **이미 잠김** — [SecurityConfig](../../src/main/kotlin/com/meepleday/user/SecurityConfig.kt). 위 "의도적 부채" 첫 항목은 해소.
+  - Kakao/Google OAuth2, 세션 쿠키 + CSRF 쿠키. ADMIN은 허용목록으로 수동 부여.
+- **Phase 명칭 폐기**: [PRD](../prd.md)에서 Phase 1/2 구분을 버리고 M0~M4로 재편 ([PRD §7](../prd.md#7-로드맵-전면-재수립)). 잔여 개인화 기능(북마크·알림)은 **M3** — [spec/m3-tracking.md](../spec/m3-tracking.md).
+- **결정 변경: 제보는 익명을 계속 허용.**
+  - 종전 전제는 "인증 도입 시 제보자를 User FK로 승격"이었으나, [PRD §4.6](../prd.md#46-인증과-로그인-벽)에서 **로그인 벽을 북마크·알림 한 곳으로 제한**하기로 함.
+  - 근거: 초기엔 데이터 공급이 가장 급함 → 제보에 인증 벽을 세우면 제보량이 급감. 검수 게이트가 이미 공개 피해를 1차 차단하므로([ADR-0002](0002-moderation-on-event.md)) 인증까지 요구할 근거가 약함.
+  - 따라서 `submittedByUserId`는 **nullable 유지**(로그인 제보만 채워짐), `submitterName`/`submitterEmail` 텍스트 필드와 병존. 텍스트 필드 제거 여부는 M3에서 판단.
+  - 대가: 익명 쓰기 표면이 남으므로 [ADR-0006](0006-abuse-prevention.md)의 방어를 계속 유지해야 함.

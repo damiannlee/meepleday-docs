@@ -1,7 +1,7 @@
 # MeepleDay 기획서 (PRD)
 
 > 작성 2026-07-23. 사용자 인터뷰 4라운드 결과를 반영한 **제품 정의 단일 소스**.
-> 이 문서는 기존 [README](../README.md)·[docs/product.md](product.md)·[docs/spec/phase2.md](spec/phase2.md) 및 일부 ADR을 **무효화하거나 개정 대상으로 지정** — [§10 기존 문서 정합성](#10-기존-문서-정합성) 참조.
+> 이 문서는 기존 [README](../README.md)·[docs/product.md](product.md)·구 `spec/phase2.md` 및 일부 ADR을 **무효화하거나 개정 대상으로 지정** — [§10 기존 문서 정합성](#10-기존-문서-정합성) 참조. 해당 정합화는 본 문서와 같은 PR에서 완료됨.
 > UI/UX 설계·구현의 출발점. 결정에는 근거와 기각 대안을 병기.
 
 ---
@@ -195,7 +195,7 @@
 - 근거: 초기엔 데이터 공급이 가장 급함 → 제보에 인증 벽을 세우면 제보량이 확 줄어듦. 대신 남용 방지([ADR-0006](adr/0006-abuse-prevention.md))를 계속 유지해야 함.
 - 기각 — **제보에도 로그인 요구**: 스팸은 줄지만 초기 데이터 기근을 악화. 검수 게이트가 이미 공개 피해를 1차 차단하므로 인증까지 요구할 필요 없음.
 
-**인증 방식** — Kakao / Google OAuth2 소셜 로그인. 자체 비밀번호 미보유. 상세 규격은 [spec/phase2.md §1](spec/phase2.md) 유지(엔티티·프로비저닝·ADMIN 승격 규칙 그대로 유효).
+**인증 방식** — Kakao / Google OAuth2 소셜 로그인, 자체 비밀번호 미보유. **이미 구현 완료**(커밋 9597909) — 세션 쿠키 + CSRF 쿠키로 확정됐고 `/api/admin/**` 은 `hasRole("ADMIN")`으로 잠겨 있음. 현황·잔여 부채는 [spec/m3-tracking.md §0](spec/m3-tracking.md).
 
 ### 4.7 추적 (북마크·알림)
 
@@ -210,7 +210,7 @@
 - 요구사항: **알림을 켜는 시점에 email이 없으면 그 자리에서 입력받는 플로우**. 로그인 시점이 아니라 알림 설정 시점 — 마찰을 필요한 순간으로 미룸.
 - email 없이도 북마크 자체는 동작 (목록 관리 용도).
 
-**중복 발송 방지**: `NotificationLog(user_id, event_id)` unique — 재실행·재시작에도 1회 보장. 상세는 [spec/phase2.md §3](spec/phase2.md).
+**중복 발송 방지**: `NotificationLog(user_id, event_id)` unique — 재실행·재시작에도 1회 보장. 상세는 [spec/m3-tracking.md §2](spec/m3-tracking.md).
 
 ### 4.8 검수 (운영자)
 
@@ -355,9 +355,10 @@
 
 ### M0 — 재설계 기반
 
-- 데이터 모델 확정: `Game` 엔티티 신설, `Event` 유형별 필드, `startAt/endAt` nullable 화, `scheduleNote` 추가, 달성률·모금액 제거.
+- 데이터 모델 확정: `Game` 엔티티 신설, `EventType`에 `OFFLINE_EVENT` 추가, 유형별 필드 정리, `scheduleNote` 추가, `goalAmount`/`currentAmount`/`currency` 및 `fundingProgressPercent()` 제거.
+- `EventStatus`에 `ANNOUNCED` 추가 — `startAt`·`endAt`은 **이미 nullable이지만** 둘 다 null이면 `ONGOING`으로 떨어지는 현 동작이 예고 이벤트를 "진행중"으로 표시함([ADR-0004](adr/0004-derived-status.md) 개정).
 - Flyway 마이그레이션 작성. 기존 데이터 이관 방침 결정.
-- 산출물: 신규 ADR 3~4건 ([§10](#10-기존-문서-정합성)).
+- 문서 정합화는 완료됨([§10](#10-기존-문서-정합성)) — ADR 0007~0010 신설, 0001·0003·0004·0006 개정.
 
 ### M1 — 발견 (Discovery)
 
@@ -437,36 +438,37 @@
 
 > 이번 인터뷰로 발생한 문서 부채. **M0에서 처리.**
 
-### 무효화 — 재작성 필요
+### 재작성 — 완료
 
-| 문서 | 사유 |
+| 문서 | 처리 |
 |---|---|
-| [README.md](../README.md) | 서비스 정의(펀딩 애그리게이터 → 이벤트 캘린더), 현재 상태, API 요약 전부 변경 |
-| [docs/product.md](product.md) | KPI를 퍼널 계층으로 교체([§3](#3-핵심-가치와-퍼널)). 데이터 수급의 "1단계 운영자 시딩"에 URL 자동 채움 반영. **자동 수집 조사·순회 주기 절은 유효하므로 보존** |
-| [docs/spec/phase2.md](spec/phase2.md) | Phase 구분 자체가 폐기 → M3 명세로 재배치. 인증 규격(§1)·알림 멱등(§3)은 내용 유효하므로 이관 |
-| [CLAUDE.md](../CLAUDE.md) | "현재 위치" 절이 구 로드맵 기준 |
+| [README.md](../README.md) | 서비스 정의·현재 위치·API 요약 재작성. **구현 현황표** 신설 |
+| [docs/product.md](product.md) | KPI를 퍼널 계층으로 교체([§3](#3-핵심-가치와-퍼널)), 데이터 수급에 URL 자동 채움·행사 수급 난이도 반영. 자동 수집 조사·순회 주기 절은 유효하므로 보존 |
+| `docs/spec/phase2.md` → [docs/spec/m3-tracking.md](spec/m3-tracking.md) | Phase 구분 폐기 → M3 명세로 개명·재배치. **인증은 구현 완료로 §0 현황 요약에 분리**, 북마크·알림만 명세로 남김 |
+| [CLAUDE.md](../CLAUDE.md) | 현재 위치·아키텍처 요점 갱신 |
+| [docs/adr/README.md](adr/README.md) | 인덱스 갱신 + ADR 개정 규약(원문 수정 대신 `## 개정` 절 추가) 명시 |
 
-### 개정 필요 — ADR
+### ADR — 완료
 
 | ADR | 처리 |
 |---|---|
-| [0001 기술 스택](adr/0001-tech-stack.md) | **유지 + 보강** — CSR SPA 유지하되 OG 프리렌더를 조건으로 추가 |
-| [0002 검수를 Event 상태로](adr/0002-moderation-on-event.md) | 유지 |
-| [0003 인증 마지막](adr/0003-auth-last.md) | **개정** — Phase 명칭 변경(M3), 익명 제보 허용 근거 반영 |
-| [0004 파생 상태](adr/0004-derived-status.md) | **개정** — `startAt/endAt` nullable 수용, 예고 이벤트의 상태 계산 규칙 추가 |
-| [0005 배포 타깃](adr/0005-deployment-target.md) | 유지 (OG 프리렌더의 배치 위치만 확인 필요) |
-| [0006 남용 방지](adr/0006-abuse-prevention.md) | **유지 + 확장** — URL 자동 채움 API의 SSRF·rate limit 포함 |
+| [0001 기술 스택](adr/0001-tech-stack.md) | **개정** — CSR SPA 유지, OG 프리렌더를 조건으로 부가 |
+| [0002 검수를 Event 상태로](adr/0002-moderation-on-event.md) | 유지 (변경 없음) |
+| [0003 인증 마지막](adr/0003-auth-last.md) | **개정** — 구현 완료로 부채 해소, Phase 명칭 폐기, 제보는 익명 유지로 결정 변경 |
+| [0004 파생 상태](adr/0004-derived-status.md) | **개정** — `ANNOUNCED` 분기 추가. 날짜가 이미 nullable임에도 둘 다 null이면 `ONGOING`이 되는 결함 기록 |
+| [0005 배포 타깃](adr/0005-deployment-target.md) | 유지 (변경 없음) |
+| [0006 남용 방지](adr/0006-abuse-prevention.md) | **개정** — URL 자동 채움 API의 SSRF·자원 상한·별도 rate limit 추가 |
+| [0007 Game 엔티티](adr/0007-game-entity.md) | **신설** |
+| [0008 타임라인 레이아웃](adr/0008-timeline-layout.md) | **신설** |
+| [0009 자동 채움 vs 자동 수집](adr/0009-fetch-vs-crawl.md) | **신설** |
+| [0010 성장 목표 미구현](adr/0010-growth-target-unbuilt.md) | **신설** |
 
-### 신설 필요 — ADR
+### 코드 영향 — 미착수 (M0)
 
-- **Game 엔티티 도입** — 1:N 모델, nullable FK, 매칭 판정을 사람이 하는 이유, 기각 대안(문자열 태그).
-- **타임라인 우선 레이아웃** — 캘린더·그리드 기각 근거.
-- **URL 자동 채움과 자동 수집의 법적 구분** — 단일 지시형 페치 vs 대량 크롤링.
-- **성장 목표와 미구현 방침** — 수치는 명시하되 캐시·프록시는 관측 후 도입.
+> 본 PR은 문서만 다룸. 아래는 M0 착수 시 작업.
 
-### 코드 영향 (재설계 결정)
-
-- 현 Phase 1 구현 중 **카드 그리드 피드·달성률 바**는 제거 대상.
-- `Event` 스키마 변경(nullable 날짜, `scheduleNote`, `gameId`, 유형별 필드) → Flyway 마이그레이션.
-- `EventStatus.of()`가 nullable 날짜를 다루도록 개정.
-- 재사용 가능 자산: Flyway 구성, 검수 도메인 메서드(`publish`/`reject`), 남용 방지, 필터 Specification 골격, OAuth2 인증 구현(9597909).
+- **제거 대상**: 카드 그리드 피드, 달성률 바, `Event.goalAmount`/`currentAmount`/`currency`, `computeFundingProgressPercent()`/`fundingProgressPercent()`.
+- **추가 대상**: `Game` 엔티티, `Event.gameId`(nullable FK), `Event.scheduleNote`, `EventType.OFFLINE_EVENT`, 행사용 필드(장소·주소·참가비·예매 링크), `EventStatus.ANNOUNCED`.
+- **개정 대상**: `EventStatus.of()` — `startAt`·`endAt`이 모두 null일 때 `ONGOING`이 아니라 `ANNOUNCED`를 반환하도록.
+- Flyway 신규 마이그레이션(현재 `V1__create_events.sql`, `V2__create_users.sql`까지 존재).
+- **재사용 가능 자산**: Flyway 구성, 검수 도메인 메서드(`publish`/`reject`), 남용 방지(honeypot·rate limit), 필터 Specification 골격, `Clock` 주입, **OAuth2 인증 일체**(커밋 9597909).
