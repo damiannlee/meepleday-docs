@@ -8,3 +8,4 @@
 | [product.md](product.md) | 성공지표 · 데이터 수급 전략 |
 | [adr](adr) | 설계 결정과 기각한 대안 ([인덱스](adr/README.md)) |
 | [spec](spec) | 기능명세 |
+| [openapi.yaml](openapi.yaml) | API 요청/응답 스키마 — 백엔드 컨트롤러에서 자동 생성, 수기 편집 금지 |

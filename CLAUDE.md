@@ -13,6 +13,17 @@
 - 구현 완료: 피드·상세·제보·검수, 남용 방지, 인증(Kakao/Google OAuth2, 세션 쿠키+CSRF), M0 데이터 모델(`Game` 엔티티, `OFFLINE_EVENT`, `ANNOUNCED` 상태).
 - 미구현 주요 항목: URL 자동 채움, OG 프리렌더, 타임라인 레이아웃, 키워드 검색 UI, 게임 매칭 후보 제시 UI, 북마크·알림.
 
+## 크로스 레포 협업
+
+- 백엔드·프론트는 서로의 레포를 직접 보지 않고 이 `docs`만을 인터페이스로 삼는다 — 작업 참고 자료도, 완료 내역 전달도 전부 여기로 통일.
+- 작업 단위(PR) 완료 시 해당 레포는 PR과 함께 다음을 갱신한다:
+  - 백엔드는 API 변경 시 [`docs/openapi.yaml`](openapi.yaml)을 재생성(gradle task, [백엔드 CLAUDE.md](https://github.com/damiannlee/meepleday-backend/blob/main/CLAUDE.md) 참조) — 요청/응답 스키마의 단일 소스.
+  - 관련 `spec/*.md`는 요청/응답 스키마를 수기 전사하지 말고 `openapi.yaml`을 링크 + 행동 규칙(엣지케이스·검증·비즈니스 규칙)만 기술(해당 스펙이 없으면 신설).
+  - 설계 결정이 있었다면 신규 ADR 또는 기존 ADR에 `## 개정 (YYYY-MM-DD)` 절 추가.
+  - 이 파일 "현재 위치"의 구현 완료/미구현 목록 갱신.
+- PR 자체의 경위·구현 디테일은 docs에 재서술하지 않는다 — 필요하면 PR 번호로만 포인터.
+- 반대쪽 레포는 별도 알림 체계 없이, 갱신된 docs를 참고해 작업을 시작한다 — "docs 참고해서 진행해" 지시가 곧 트리거.
+
 ## 아키텍처 요점 (재서술 대신 포인터)
 
 - 제보는 별도 테이블 없이 `Event.moderationStatus`로 통합 — [ADR-0002](adr/0002-moderation-on-event.md).
