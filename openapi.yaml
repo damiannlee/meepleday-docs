@@ -3,58 +3,32 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
-  description: Generated server url
+- description: Generated server url
+  url: http://localhost:8080
 paths:
-  /api/events:
+  /api/admin/events:
     get:
-      tags:
-      - event-controller
-      operationId: getFeed
+      operationId: list
       parameters:
-      - name: region
-        in: query
+      - in: query
+        name: status
         required: false
         schema:
           type: string
+          default: PENDING
           enum:
-          - DOMESTIC
-          - OVERSEAS
-      - name: eventType
-        in: query
-        required: false
-        schema:
-          type: string
-          enum:
-          - FUNDING
-          - PREORDER
-          - SALE
-          - OFFLINE_EVENT
-      - name: platform
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: status
-        in: query
-        required: false
-        schema:
-          type: string
-          enum:
-          - ANNOUNCED
-          - UPCOMING
-          - ONGOING
-          - ENDING_SOON
-          - ENDED
-      - name: page
-        in: query
+          - PENDING
+          - PUBLISHED
+          - REJECTED
+      - in: query
+        name: page
         required: false
         schema:
           type: integer
           format: int32
           default: 0
-      - name: size
-        in: query
+      - in: query
+        name: size
         required: false
         schema:
           type: integer
@@ -62,36 +36,19 @@ paths:
           default: 20
       responses:
         "200":
-          description: OK
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/PageEventResponse"
-    post:
-      tags:
-      - event-controller
-      operationId: submit
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EventSubmissionRequest"
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/EventResponse"
-  /api/admin/events/{id}/moderation:
-    patch:
+          description: OK
       tags:
       - event-admin-controller
+  /api/admin/events/{id}/moderation:
+    patch:
       operationId: moderate
       parameters:
-      - name: id
-        in: path
+      - in: path
+        name: id
         required: true
         schema:
           type: integer
@@ -104,216 +61,44 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
           content:
             '*/*':
               schema:
                 $ref: "#/components/schemas/EventResponse"
-  /api/me:
-    get:
-      tags:
-      - auth-controller
-      operationId: me
-      responses:
-        "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/UserResponse"
-  /api/events/{id}:
-    get:
-      tags:
-      - event-controller
-      operationId: getEvent
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/EventResponse"
-  /api/admin/events:
-    get:
       tags:
       - event-admin-controller
-      operationId: list
+  /api/events:
+    get:
+      operationId: getFeed
       parameters:
-      - name: status
-        in: query
+      - in: query
+        name: region
         required: false
         schema:
           type: string
-          default: PENDING
           enum:
-          - PENDING
-          - PUBLISHED
-          - REJECTED
-      - name: page
-        in: query
+          - DOMESTIC
+          - OVERSEAS
+      - in: query
+        name: eventType
         required: false
         schema:
-          type: integer
-          format: int32
-          default: 0
-      - name: size
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-          default: 20
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/PageEventResponse"
-components:
-  schemas:
-    EventSubmissionRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          maxLength: 255
-          minLength: 0
-        eventType:
           type: string
           enum:
           - FUNDING
           - PREORDER
           - SALE
           - OFFLINE_EVENT
-        region:
+      - in: query
+        name: platform
+        required: false
+        schema:
           type: string
-          enum:
-          - DOMESTIC
-          - OVERSEAS
-        platform:
-          type: string
-          maxLength: 255
-          minLength: 0
-        originalUrl:
-          type: string
-          maxLength: 1000
-          minLength: 0
-        description:
-          type: string
-        coverImageUrl:
-          type: string
-          maxLength: 1000
-          minLength: 0
-        publisher:
-          type: string
-          maxLength: 255
-          minLength: 0
-        startAt:
-          type: string
-          format: date-time
-        endAt:
-          type: string
-          format: date-time
-        scheduleNote:
-          type: string
-          maxLength: 255
-          minLength: 0
-        gameId:
-          type: integer
-          format: int64
-        location:
-          type: string
-          maxLength: 255
-          minLength: 0
-        address:
-          type: string
-          maxLength: 500
-          minLength: 0
-        admissionFee:
-          type: number
-        reservationUrl:
-          type: string
-          maxLength: 1000
-          minLength: 0
-        submitterName:
-          type: string
-          maxLength: 255
-          minLength: 0
-        submitterEmail:
-          type: string
-          maxLength: 255
-          minLength: 0
-        website:
-          type: string
-          maxLength: 255
-          minLength: 0
-        isHoneypotTripped:
-          type: boolean
-      required:
-      - eventType
-      - isHoneypotTripped
-      - originalUrl
-      - platform
-      - region
-      - title
-    EventResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-        eventType:
-          type: string
-          enum:
-          - FUNDING
-          - PREORDER
-          - SALE
-          - OFFLINE_EVENT
-        region:
-          type: string
-          enum:
-          - DOMESTIC
-          - OVERSEAS
-        platform:
-          type: string
-        originalUrl:
-          type: string
-        description:
-          type: string
-        coverImageUrl:
-          type: string
-        publisher:
-          type: string
-        startAt:
-          type: string
-          format: date-time
-        endAt:
-          type: string
-          format: date-time
-        scheduleNote:
-          type: string
-        gameId:
-          type: integer
-          format: int64
-        location:
-          type: string
-        address:
-          type: string
-        admissionFee:
-          type: number
-        reservationUrl:
-          type: string
-        status:
+      - in: query
+        name: status
+        required: false
+        schema:
           type: string
           enum:
           - ANNOUNCED
@@ -321,21 +106,79 @@ components:
           - ONGOING
           - ENDING_SOON
           - ENDED
-        moderationStatus:
-          type: string
-          enum:
-          - PENDING
-          - PUBLISHED
-          - REJECTED
-      required:
-      - eventType
-      - id
-      - moderationStatus
-      - originalUrl
-      - platform
-      - region
-      - status
-      - title
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - in: query
+        name: size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageEventResponse"
+          description: OK
+      tags:
+      - event-controller
+    post:
+      operationId: submit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventSubmissionRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventResponse"
+          description: Created
+      tags:
+      - event-controller
+  /api/events/{id}:
+    get:
+      operationId: getEvent
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventResponse"
+          description: OK
+      tags:
+      - event-controller
+  /api/me:
+    get:
+      operationId: me
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+          description: OK
+      tags:
+      - auth-controller
+components:
+  schemas:
     EventModerationRequest:
       type: object
       properties:
@@ -350,9 +193,229 @@ components:
           minLength: 0
       required:
       - action
+    EventResponse:
+      type: object
+      properties:
+        address:
+          type: string
+        admissionFee:
+          type: number
+        coverImageUrl:
+          type: string
+        description:
+          type: string
+        endAt:
+          type: string
+          format: date-time
+        eventType:
+          type: string
+          enum:
+          - FUNDING
+          - PREORDER
+          - SALE
+          - OFFLINE_EVENT
+        gameId:
+          type: integer
+          format: int64
+        id:
+          type: integer
+          format: int64
+        location:
+          type: string
+        moderationStatus:
+          type: string
+          enum:
+          - PENDING
+          - PUBLISHED
+          - REJECTED
+        originalUrl:
+          type: string
+        platform:
+          type: string
+        publisher:
+          type: string
+        region:
+          type: string
+          enum:
+          - DOMESTIC
+          - OVERSEAS
+        reservationUrl:
+          type: string
+        scheduleNote:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - ANNOUNCED
+          - UPCOMING
+          - ONGOING
+          - ENDING_SOON
+          - ENDED
+        title:
+          type: string
+      required:
+      - eventType
+      - id
+      - moderationStatus
+      - originalUrl
+      - platform
+      - region
+      - status
+      - title
+    EventSubmissionRequest:
+      type: object
+      properties:
+        address:
+          type: string
+          maxLength: 500
+          minLength: 0
+        admissionFee:
+          type: number
+        coverImageUrl:
+          type: string
+          maxLength: 1000
+          minLength: 0
+        description:
+          type: string
+        endAt:
+          type: string
+          format: date-time
+        eventType:
+          type: string
+          enum:
+          - FUNDING
+          - PREORDER
+          - SALE
+          - OFFLINE_EVENT
+        gameId:
+          type: integer
+          format: int64
+        isHoneypotTripped:
+          type: boolean
+        location:
+          type: string
+          maxLength: 255
+          minLength: 0
+        originalUrl:
+          type: string
+          maxLength: 1000
+          minLength: 0
+        platform:
+          type: string
+          maxLength: 255
+          minLength: 0
+        publisher:
+          type: string
+          maxLength: 255
+          minLength: 0
+        region:
+          type: string
+          enum:
+          - DOMESTIC
+          - OVERSEAS
+        reservationUrl:
+          type: string
+          maxLength: 1000
+          minLength: 0
+        scheduleNote:
+          type: string
+          maxLength: 255
+          minLength: 0
+        startAt:
+          type: string
+          format: date-time
+        submitterEmail:
+          type: string
+          maxLength: 255
+          minLength: 0
+        submitterName:
+          type: string
+          maxLength: 255
+          minLength: 0
+        title:
+          type: string
+          maxLength: 255
+          minLength: 0
+        website:
+          type: string
+          maxLength: 255
+          minLength: 0
+      required:
+      - eventType
+      - isHoneypotTripped
+      - originalUrl
+      - platform
+      - region
+      - title
+    PageEventResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventResponse"
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
     UserResponse:
       type: object
       properties:
+        displayName:
+          type: string
+        email:
+          type: string
         id:
           type: integer
           format: int64
@@ -361,10 +424,6 @@ components:
           enum:
           - KAKAO
           - GOOGLE
-        email:
-          type: string
-        displayName:
-          type: string
         role:
           type: string
           enum:
@@ -375,62 +434,3 @@ components:
       - id
       - provider
       - role
-    PageEventResponse:
-      type: object
-      properties:
-        totalPages:
-          type: integer
-          format: int32
-        totalElements:
-          type: integer
-          format: int64
-        pageable:
-          $ref: "#/components/schemas/PageableObject"
-        numberOfElements:
-          type: integer
-          format: int32
-        first:
-          type: boolean
-        last:
-          type: boolean
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: "#/components/schemas/EventResponse"
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: "#/components/schemas/SortObject"
-        empty:
-          type: boolean
-    PageableObject:
-      type: object
-      properties:
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: "#/components/schemas/SortObject"
-    SortObject:
-      type: object
-      properties:
-        unsorted:
-          type: boolean
-        sorted:
-          type: boolean
-        empty:
-          type: boolean
