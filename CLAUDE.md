@@ -22,7 +22,7 @@
   - 설계 결정이 있었다면 신규 ADR 또는 기존 ADR에 `## 개정 (YYYY-MM-DD)` 절 추가.
   - 이 파일 "현재 위치"의 구현 완료/미구현 목록 갱신.
 - PR 자체의 경위·구현 디테일은 docs에 재서술하지 않는다 — 필요하면 PR 번호로만 포인터.
-- 반대쪽 레포는 별도 알림 체계 없이, 갱신된 docs를 참고해 작업을 시작한다 — "docs 참고해서 진행해" 지시가 곧 트리거.
+- 반대쪽 레포는 갱신된 docs를 참고해 작업을 시작한다 — 실제 착수는 여전히 "docs 참고해서 진행해" 사용자 지시가 트리거. 다만 백엔드 PR이 `docs/`를 건드리면 CI가 frontend 레포에 이슈를 자동 생성해 대기 목록으로 남긴다([백엔드 CI](https://github.com/damiannlee/meepleday-backend/blob/main/.github/workflows/notify-frontend.yml)) — 무엇을 아직 안 시켰는지 사람이 기억할 필요 없음.
 
 ## 아키텍처 요점 (재서술 대신 포인터)
 
