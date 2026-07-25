@@ -107,6 +107,11 @@ paths:
           - ENDING_SOON
           - ENDED
       - in: query
+        name: q
+        required: false
+        schema:
+          type: string
+      - in: query
         name: page
         required: false
         schema:
