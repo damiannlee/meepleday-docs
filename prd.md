@@ -353,12 +353,13 @@
 
 > 기존 Phase 1/2 구분은 이번 인터뷰 결과로 **폐기**. 퍼널 단계에 맞춰 재정의.
 
-### M0 — 재설계 기반
+### M0 — 재설계 기반 (완료)
 
 - 데이터 모델 확정: `Game` 엔티티 신설, `EventType`에 `OFFLINE_EVENT` 추가, 유형별 필드 정리, `scheduleNote` 추가, `goalAmount`/`currentAmount`/`currency` 및 `fundingProgressPercent()` 제거.
 - `EventStatus`에 `ANNOUNCED` 추가 — `startAt`·`endAt`은 **이미 nullable이지만** 둘 다 null이면 `ONGOING`으로 떨어지는 현 동작이 예고 이벤트를 "진행중"으로 표시함([ADR-0004](adr/0004-derived-status.md) 개정).
 - Flyway 마이그레이션 작성. 기존 데이터 이관 방침 결정.
-- 문서 정합화는 완료됨([§10](#10-기존-문서-정합성)) — ADR 0007~0010 신설, 0001·0003·0004·0006 개정.
+- 문서 정합화([§10](#10-기존-문서-정합성)) — ADR 0007~0010 신설, 0001·0003·0004·0006 개정.
+- 코드 반영 완료 — 상세는 [§10 코드 영향](#10-기존-문서-정합성) 참조.
 
 ### M1 — 발견 (Discovery)
 
@@ -463,12 +464,8 @@
 | [0009 자동 채움 vs 자동 수집](adr/0009-fetch-vs-crawl.md) | **신설** |
 | [0010 성장 목표 미구현](adr/0010-growth-target-unbuilt.md) | **신설** |
 
-### 코드 영향 — 미착수 (M0)
+### 코드 영향 — 완료 (M0)
 
-> 본 PR은 문서만 다룸. 아래는 M0 착수 시 작업.
-
-- **제거 대상**: 카드 그리드 피드, 달성률 바, `Event.goalAmount`/`currentAmount`/`currency`, `computeFundingProgressPercent()`/`fundingProgressPercent()`.
-- **추가 대상**: `Game` 엔티티, `Event.gameId`(nullable FK), `Event.scheduleNote`, `EventType.OFFLINE_EVENT`, 행사용 필드(장소·주소·참가비·예매 링크), `EventStatus.ANNOUNCED`.
-- **개정 대상**: `EventStatus.of()` — `startAt`·`endAt`이 모두 null일 때 `ONGOING`이 아니라 `ANNOUNCED`를 반환하도록.
-- Flyway 신규 마이그레이션(현재 `V1__create_events.sql`, `V2__create_users.sql`까지 존재).
-- **재사용 가능 자산**: Flyway 구성, 검수 도메인 메서드(`publish`/`reject`), 남용 방지(honeypot·rate limit), 필터 Specification 골격, `Clock` 주입, **OAuth2 인증 일체**(커밋 9597909).
+- meepleday-backend 커밋 `3d4f74e`(2026-07-24)에서 아래 체크리스트 전량 반영, `./gradlew test` 통과 확인.
+- 반영 내역: `Game` 엔티티, `Event.gameId`(nullable FK), `Event.scheduleNote`, `EventType.OFFLINE_EVENT`(+행사용 필드), `EventStatus.ANNOUNCED`(및 `EventStatus.of()` null-null 분기 수정), `V3__game_and_event_type_expansion.sql` 마이그레이션, 달성률 관련 필드/메서드 제거.
+- PREORDER/SALE 유형별 필드, 게임 매칭 후보 제시 UI, 타임라인 레이아웃 교체는 이 체크리스트 범위 밖 — M1/M2로 이관.
