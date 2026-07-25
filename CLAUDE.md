@@ -45,4 +45,4 @@
 ## Git
 
 - `main`(각 레포 기본 브랜치) 직접 커밋 금지 — 브랜치 생성 후 작업.
-- 커밋 = Conventional Commits + 본문 한국어 개조식. PR 생성은 명시적 요청 시에만.
+- 커밋 = Conventional Commits + 본문 한국어 개조식.
