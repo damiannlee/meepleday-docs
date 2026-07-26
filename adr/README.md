@@ -13,7 +13,7 @@
 | [0005](0005-deployment-target.md) | 배포 타깃 (AWS 서울, M3 이후 완성형 출시) | Accepted |
 | [0006](0006-abuse-prevention.md) | 익명 제보 남용 방지 (honeypot + IP rate limit) | Accepted · 개정 2026-07-23 (URL 자동 채움 SSRF 방어 추가) |
 | [0007](0007-game-entity.md) | 게임을 별도 엔티티로 두고 Event를 1:N 연결 | Accepted |
-| [0008](0008-timeline-layout.md) | 첫 화면을 기간 그룹 타임라인으로 | Accepted |
+| [0008](0008-timeline-layout.md) | 첫 화면을 기간 그룹 타임라인으로 | Accepted · 개정 2026-07-26 (간트/카드그리드 토글 추가 채택) |
 | [0009](0009-fetch-vs-crawl.md) | URL 자동 채움을 자동 수집과 분리해 취급 | Accepted |
 | [0010](0010-growth-target-unbuilt.md) | 성장 목표는 명시하되 구현하지 않는다 | Accepted |
 | [0011](0011-search.md) | 키워드 검색 (LIKE 부분일치로 시작, FTS defer) | Accepted |

@@ -11,7 +11,7 @@
 - **PRD 확정, M0(재설계 기반) 완료, M1(발견) 착수 전.** 정체성을 "펀딩 애그리게이터" → "보드게임 이벤트 캘린더"로 재정의, Phase 1/2 구분 폐기.
 - 로드맵: **M0 재설계 기반 → M1 발견 → M2 공급 → M3 추적 → M4+ 장기 비전** ([PRD §7](prd.md#7-로드맵-전면-재수립)).
 - 구현 완료: 피드·상세·제보·검수, 남용 방지, 인증(Kakao/Google OAuth2, 세션 쿠키+CSRF), M0 데이터 모델(`Game` 엔티티, `OFFLINE_EVENT`, `ANNOUNCED` 상태).
-- 미구현 주요 항목: URL 자동 채움, OG 프리렌더, 타임라인 레이아웃, 키워드 검색 UI, 게임 매칭 후보 제시 UI, 북마크·알림.
+- 미구현 주요 항목: URL 자동 채움, OG 프리렌더, 타임라인 레이아웃(간트/그룹/카드그리드 토글), 키워드 검색 UI, 게임 매칭 후보 제시 UI, 북마크. 마감임박 알림은 M3 범위에서 빠져 장기비전으로 이동 — [PRD §8.5](prd.md#85-마감임박-알림).
 
 ## 크로스 레포 협업
 
@@ -29,7 +29,7 @@
 - 제보는 별도 테이블 없이 `Event.moderationStatus`로 통합 — [ADR-0002](adr/0002-moderation-on-event.md).
 - 이벤트 진행 상태(ANNOUNCED/UPCOMING/ONGOING/ENDING_SOON/ENDED)는 저장 안 하고 파생 — [ADR-0004](adr/0004-derived-status.md). `startAt`/`endAt` 둘 다 null이면 `ANNOUNCED`.
 - 게임 단위 묶음은 `Game` 1:N `Event`(`Event.gameId`, nullable FK) — [ADR-0007](adr/0007-game-entity.md). 동일 게임 판정은 사람이(검수 단계), 매칭 후보 UI는 M2.
-- 첫 화면은 기간 그룹 타임라인 — [ADR-0008](adr/0008-timeline-layout.md). 현재 카드 그리드 구현은 교체 대상.
+- 첫 화면은 기간 그룹 타임라인이 기본값, 간트·카드그리드는 보조 토글 — [ADR-0008](adr/0008-timeline-layout.md)(2026-07-26 개정).
 - 공유 유입이 주 채널 → CSR SPA 유지하되 **OG 프리렌더 필수**(미구현) — [ADR-0001](adr/0001-tech-stack.md).
 - URL 자동 채움(단일 지시형 페치)은 자동 수집(대량 크롤링)과 별개 사안 — [ADR-0009](adr/0009-fetch-vs-crawl.md). SSRF·자원 상한·rate limit 필수.
 - 검색은 `LIKE` 부분일치로 시작, 게임 제목은 `gameId` 집합 경유 **2단계 질의**(join 불가) — [ADR-0011](adr/0011-search.md), [spec/search.md](spec/search.md).
