@@ -19,7 +19,7 @@
 
 **사용자 스토리**
 - 방문자는 게임명(한글명·원제)·제작사로 이벤트를 검색해 원하는 항목만 본다.
-- 검색어는 기존 필터(유형·상태·지역·플랫폼)와 **AND 결합** — 예: "카탄" + 선주문 + 진행중.
+- 검색어는 기존 필터(유형·상태·지역·플랫폼)와 **AND 결합** — 예: "카탄" + 선주문 + 진행 중.
 
 **엔드포인트**
 - 기존 `GET /api/events` 에 `q`(선택) 파라미터 추가. 별도 라우트 없음.
@@ -29,7 +29,7 @@
 - 대상: `Event.title`, `Game.titleKo`, `Game.titleOriginal`, `publisher`.
 - `description`·`platform` 제외([ADR-0011](../adr/0011-search.md)).
 - 대소문자 무시 부분일치(`lower(field) LIKE lower('%q%')`), 대상 필드 OR.
-- 공개 피드 게이트(`moderationStatus = PUBLISHED`), 기간 그룹·예고 섹션 분리, 마감임박순 정렬은 그대로.
+- 공개 피드 게이트(`moderationStatus = PUBLISHED`), 기간 그룹·예고 섹션 분리, 마감 임박순 정렬은 그대로.
 
 **구현 메모**
 - `Event.gameId`가 JPA 연관이 아니라 단순 컬럼이므로 **2단계 질의**(Game 제목 매칭 → gameId 집합 → `Event.gameId IN`). 질의 횟수는 **고정 2회** 유지(N+1 금지).
