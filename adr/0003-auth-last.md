@@ -28,7 +28,7 @@
 ## 개정 (2026-07-23) — 부채 해소 완료, 단 제보는 익명 유지
 
 - **상태 갱신: 인증은 구현 완료** (커밋 9597909). 이 ADR이 기록한 "지연"은 종료됨.
-  - `/api/admin/**` 은 `hasRole("ADMIN")`으로 **이미 잠김** — [SecurityConfig](../../src/main/kotlin/com/meepleday/user/SecurityConfig.kt). 위 "의도적 부채" 첫 항목은 해소.
+  - `/api/admin/**` 은 `hasRole("ADMIN")`으로 **이미 잠김** — [SecurityConfig](../../src/main/kotlin/com/meepleon/user/SecurityConfig.kt). 위 "의도적 부채" 첫 항목은 해소.
   - Kakao/Google OAuth2, 세션 쿠키 + CSRF 쿠키. ADMIN은 허용목록으로 수동 부여.
 - **Phase 명칭 폐기**: [PRD](../prd.md)에서 Phase 1/2 구분을 버리고 M0~M4로 재편 ([PRD §7](../prd.md#7-로드맵-전면-재수립)). 잔여 개인화 기능(북마크·알림)은 **M3** — [spec/m3-tracking.md](../spec/m3-tracking.md).
 - **결정 변경: 제보는 익명을 계속 허용.**

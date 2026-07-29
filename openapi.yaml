@@ -90,6 +90,7 @@ paths:
           - PREORDER
           - SALE
           - OFFLINE_EVENT
+          - RETAIL
       - in: query
         name: platform
         required: false
@@ -219,6 +220,7 @@ components:
           - PREORDER
           - SALE
           - OFFLINE_EVENT
+          - RETAIL
         gameId:
           type: integer
           format: int64
@@ -295,6 +297,7 @@ components:
           - PREORDER
           - SALE
           - OFFLINE_EVENT
+          - RETAIL
         gameId:
           type: integer
           format: int64

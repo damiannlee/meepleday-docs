@@ -1,6 +1,6 @@
 # Meepleon — 공통 지침
 
-> [meepleday-backend](https://github.com/damiannlee/meepleday-backend), [meepleday-frontend](https://github.com/damiannlee/meepleday-frontend) 양쪽에 `docs/` git submodule로 포함되어, 각 레포 루트 `CLAUDE.md`에서 `@docs/CLAUDE.md`로 import된다. 레포별 특화 컨벤션은 각 레포 `CLAUDE.md` 참조.
+> [meepleon-backend](https://github.com/damiannlee/meepleon-backend), [meepleday-frontend](https://github.com/damiannlee/meepleday-frontend) 양쪽에 `docs/` git submodule로 포함되어, 각 레포 루트 `CLAUDE.md`에서 `@docs/CLAUDE.md`로 import된다. 레포별 특화 컨벤션은 각 레포 `CLAUDE.md` 참조.
 
 ## 제품
 
@@ -17,12 +17,12 @@
 
 - 백엔드·프론트는 서로의 레포를 직접 보지 않고 이 `docs`만을 인터페이스로 삼는다 — 작업 참고 자료도, 완료 내역 전달도 전부 여기로 통일.
 - 작업 단위(PR) 완료 시 해당 레포는 PR과 함께 다음을 갱신한다:
-  - 백엔드는 API 변경 시 [`docs/openapi.yaml`](openapi.yaml)을 재생성(gradle task, [백엔드 CLAUDE.md](https://github.com/damiannlee/meepleday-backend/blob/main/CLAUDE.md) 참조) — 요청/응답 스키마의 단일 소스.
+  - 백엔드는 API 변경 시 [`docs/openapi.yaml`](openapi.yaml)을 재생성(gradle task, [백엔드 CLAUDE.md](https://github.com/damiannlee/meepleon-backend/blob/main/CLAUDE.md) 참조) — 요청/응답 스키마의 단일 소스.
   - 관련 `spec/*.md`는 요청/응답 스키마를 수기 전사하지 말고 `openapi.yaml`을 링크 + 행동 규칙(엣지케이스·검증·비즈니스 규칙)만 기술(해당 스펙이 없으면 신설).
   - 설계 결정이 있었다면 신규 ADR 또는 기존 ADR에 `## 개정 (YYYY-MM-DD)` 절 추가.
   - 이 파일 "현재 위치"의 구현 완료/미구현 목록 갱신.
 - PR 자체의 경위·구현 디테일은 docs에 재서술하지 않는다 — 필요하면 PR 번호로만 포인터.
-- 반대쪽 레포는 갱신된 docs를 참고해 작업을 시작한다 — 실제 착수는 여전히 "docs 참고해서 진행해" 사용자 지시가 트리거. 다만 백엔드 PR이 `docs/`를 건드리면 CI가 frontend 레포에 이슈를 자동 생성해 대기 목록으로 남긴다([백엔드 CI](https://github.com/damiannlee/meepleday-backend/blob/main/.github/workflows/notify-frontend.yml)) — 무엇을 아직 안 시켰는지 사람이 기억할 필요 없음.
+- 반대쪽 레포는 갱신된 docs를 참고해 작업을 시작한다 — 실제 착수는 여전히 "docs 참고해서 진행해" 사용자 지시가 트리거. 다만 백엔드 PR이 `docs/`를 건드리면 CI가 frontend 레포에 이슈를 자동 생성해 대기 목록으로 남긴다([백엔드 CI](https://github.com/damiannlee/meepleon-backend/blob/main/.github/workflows/notify-frontend.yml)) — 무엇을 아직 안 시켰는지 사람이 기억할 필요 없음.
 
 ## 아키텍처 요점 (재서술 대신 포인터)
 

@@ -5,9 +5,9 @@
 
 ## 결정
 
-- `EventStatus`를 DB 컬럼으로 저장하지 않고 `startAt`/`endAt`과 현재 시각으로 **읽는 시점에 계산**([EventStatus.of](../../src/main/kotlin/com/meepleday/event/EventEnums.kt)).
+- `EventStatus`를 DB 컬럼으로 저장하지 않고 `startAt`/`endAt`과 현재 시각으로 **읽는 시점에 계산**([EventStatus.of](../../src/main/kotlin/com/meepleon/event/EventEnums.kt)).
 - `ENDING_SOON`은 ONGOING 중 `endAt`이 임계값(48h) 이내인 파생 상태.
-- 상태 기반 필터는 시간 조건 술어로 변환해 쿼리([EventSpecifications.status](../../src/main/kotlin/com/meepleday/event/EventSpecifications.kt)).
+- 상태 기반 필터는 시간 조건 술어로 변환해 쿼리([EventSpecifications.status](../../src/main/kotlin/com/meepleon/event/EventSpecifications.kt)).
 - 현재 시각은 `Clock` 빈 주입으로 테스트 가능하게.
 
 ## 근거
