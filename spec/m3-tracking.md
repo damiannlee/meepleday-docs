@@ -21,7 +21,7 @@
 
 ## 0. 선행 — 인증 (구현 완료)
 
-> 종전 이 문서의 §1. **이미 구현됐으므로 명세가 아니라 현황 요약**. 커밋 9597909, [SecurityConfig](../../src/main/kotlin/com/meepleday/user/SecurityConfig.kt).
+> 종전 이 문서의 §1. **이미 구현됐으므로 명세가 아니라 현황 요약**. 커밋 9597909, [SecurityConfig](../../src/main/kotlin/com/meepleon/user/SecurityConfig.kt).
 
 - **OAuth2 소셜 로그인(Kakao·Google)**, 자체 비밀번호 미보유.
   - 기각 — 이메일·비밀번호 자체 인증: 비밀번호 저장·유출 책임·재설정 흐름 부담. 국내 대상엔 카카오 로그인이 가입 마찰 최저.
