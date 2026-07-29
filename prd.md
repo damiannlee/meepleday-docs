@@ -1,4 +1,4 @@
-# MeepleDay 기획서 (PRD)
+# Meepleon 기획서 (PRD)
 
 > 작성 2026-07-23. 사용자 인터뷰 4라운드 결과를 반영한 **제품 정의 단일 소스**.
 > 이 문서는 기존 [README](../README.md)·[docs/product.md](product.md)·구 `spec/phase2.md` 및 일부 ADR을 **무효화하거나 개정 대상으로 지정** — [§10 기존 문서 정합성](#10-기존-문서-정합성) 참조. 해당 정합화는 본 문서와 같은 PR에서 완료됨.

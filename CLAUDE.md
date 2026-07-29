@@ -1,4 +1,4 @@
-# MeepleDay — 공통 지침
+# Meepleon — 공통 지침
 
 > [meepleday-backend](https://github.com/damiannlee/meepleday-backend), [meepleday-frontend](https://github.com/damiannlee/meepleday-frontend) 양쪽에 `docs/` git submodule로 포함되어, 각 레포 루트 `CLAUDE.md`에서 `@docs/CLAUDE.md`로 import된다. 레포별 특화 컨벤션은 각 레포 `CLAUDE.md` 참조.
 

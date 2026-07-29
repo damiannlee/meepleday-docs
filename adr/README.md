@@ -17,5 +17,6 @@
 | [0009](0009-fetch-vs-crawl.md) | URL 자동 채움을 자동 수집과 분리해 취급 | Accepted |
 | [0010](0010-growth-target-unbuilt.md) | 성장 목표는 명시하되 구현하지 않는다 | Accepted |
 | [0011](0011-search.md) | 키워드 검색 (LIKE 부분일치로 시작, FTS defer) | Accepted |
+| [0012](0012-rebrand-meepleon.md) | 서비스명 "미플데이" → "미플온" 리브랜딩 | Accepted |
 
 제품 정의는 [../prd.md](../prd.md), 기능명세는 검색 [../spec/search.md](../spec/search.md) · M3 [../spec/m3-tracking.md](../spec/m3-tracking.md), 성공지표·데이터 수급은 [../product.md](../product.md).
