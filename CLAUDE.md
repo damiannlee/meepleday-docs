@@ -8,10 +8,7 @@
 
 ## 현재 위치
 
-- **PRD 확정, M0(재설계 기반) 완료, M1(발견) 착수 전.** 정체성을 "펀딩 애그리게이터" → "보드게임 이벤트 캘린더"로 재정의, Phase 1/2 구분 폐기.
-- 로드맵: **M0 재설계 기반 → M1 발견 → M2 공급 → M3 추적 → M4+ 장기 비전** ([PRD §7](prd.md#7-로드맵-전면-재수립)).
-- 구현 완료: 피드·상세·제보·검수, 남용 방지, 인증(Kakao/Google OAuth2, 세션 쿠키+CSRF), M0 데이터 모델(`Game` 엔티티, `OFFLINE_EVENT`, `ANNOUNCED` 상태).
-- 미구현 주요 항목: URL 자동 채움, OG 프리렌더, 타임라인 레이아웃(간트/그룹/카드그리드 토글), 키워드 검색 UI, 게임 매칭 후보 제시 UI, 북마크. 마감 임박 알림은 M3 범위에서 빠져 장기비전으로 이동 — [PRD §8.5](prd.md#85-마감-임박-알림).
+최신 구현 현황·로드맵 위치는 [status.md](status.md) — CLAUDE.md 본문과 분리해 백엔드/프론트엔드 세션이 직접 갱신 가능.
 
 ## 크로스 레포 협업
 
@@ -20,7 +17,7 @@
   - 백엔드는 API 변경 시 [`docs/openapi.yaml`](openapi.yaml)을 재생성(gradle task, [백엔드 CLAUDE.md](https://github.com/damiannlee/meepleon-backend/blob/main/CLAUDE.md) 참조) — 요청/응답 스키마의 단일 소스.
   - 관련 `spec/*.md`는 요청/응답 스키마를 수기 전사하지 말고 `openapi.yaml`을 링크 + 행동 규칙(엣지케이스·검증·비즈니스 규칙)만 기술(해당 스펙이 없으면 신설).
   - 설계 결정이 있었다면 신규 ADR 또는 기존 ADR에 `## 개정 (YYYY-MM-DD)` 절 추가.
-  - 이 파일 "현재 위치"의 구현 완료/미구현 목록 갱신.
+  - [`status.md`](status.md)의 구현 완료/미구현 목록 갱신.
 - PR 자체의 경위·구현 디테일은 docs에 재서술하지 않는다 — 필요하면 PR 번호로만 포인터.
 - 반대쪽 레포는 갱신된 docs를 참고해 작업을 시작한다 — 실제 착수는 여전히 "docs 참고해서 진행해" 사용자 지시가 트리거. 다만 백엔드 PR이 `docs/`를 건드리면 CI가 frontend 레포에 이슈를 자동 생성해 대기 목록으로 남긴다([백엔드 CI](https://github.com/damiannlee/meepleon-backend/blob/main/.github/workflows/notify-frontend.yml)) — 무엇을 아직 안 시켰는지 사람이 기억할 필요 없음.
 
