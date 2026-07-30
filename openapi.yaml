@@ -171,6 +171,25 @@ paths:
           description: OK
       tags:
       - event-controller
+  /api/games/{id}:
+    get:
+      operationId: getGame
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDetailResponse"
+          description: OK
+      tags:
+      - game-controller
   /api/me:
     get:
       operationId: me
@@ -358,6 +377,29 @@ components:
       - platform
       - region
       - title
+    GameDetailResponse:
+      type: object
+      properties:
+        bggId:
+          type: integer
+          format: int64
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventResponse"
+        id:
+          type: integer
+          format: int64
+        publisher:
+          type: string
+        titleKo:
+          type: string
+        titleOriginal:
+          type: string
+      required:
+      - events
+      - id
+      - titleOriginal
     PageEventResponse:
       type: object
       properties:
