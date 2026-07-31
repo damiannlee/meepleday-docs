@@ -152,6 +152,24 @@ paths:
           description: Created
       tags:
       - event-controller
+  /api/events/prefill:
+    post:
+      operationId: prefill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrefillRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrefillResponse"
+          description: OK
+      tags:
+      - prefill-controller
   /api/events/{id}:
     get:
       operationId: getEvent
@@ -450,6 +468,29 @@ components:
           $ref: "#/components/schemas/SortObject"
         unpaged:
           type: boolean
+    PrefillRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          maxLength: 2048
+          minLength: 0
+          pattern: ^https?://.+
+      required:
+      - url
+    PrefillResponse:
+      type: object
+      properties:
+        coverImageUrl:
+          type: string
+        description:
+          type: string
+        originalUrl:
+          type: string
+        title:
+          type: string
+      required:
+      - originalUrl
     SortObject:
       type: object
       properties:
