@@ -26,6 +26,9 @@
 - 제보는 별도 테이블 없이 `Event.moderationStatus`로 통합 — [ADR-0002](adr/0002-moderation-on-event.md).
 - 이벤트 진행 상태(ANNOUNCED/UPCOMING/ONGOING/ENDING_SOON/ENDED)는 저장 안 하고 파생 — [ADR-0004](adr/0004-derived-status.md). `startAt`/`endAt` 둘 다 null이면 `ANNOUNCED`.
 - 게임 단위 묶음은 `Game` 1:N `Event`(`Event.gameId`, nullable FK) — [ADR-0007](adr/0007-game-entity.md). 동일 게임 판정은 사람이(검수 단계), 매칭 후보 UI는 M2.
+- 추적은 **북마크(`Event`) + 관심 게임 팔로우(`Game`) 병존** — [ADR-0013](adr/0013-bookmark-vs-game-follow.md). 팔로우는 신규 일정 등록 알림까지만이고 자동 북마크하지 않음. 행동 규칙은 [spec/tracking-model.md](spec/tracking-model.md).
+- 생애주기 마일스톤은 `EventType.MILESTONE`(점 이벤트, `gameId` 필수) — [ADR-0014](adr/0014-milestone-event-type.md). 게임 페이지 외 전면 비노출(피드·필터·검색·OG), 북마크 불가, 파생 상태 대상 아님.
+- 예고(`ANNOUNCED`)가 확정되면 **같은 row 갱신**(새 row 금지) — [ADR-0004 개정](adr/0004-derived-status.md). 전이 자체가 시작 알림 트리거.
 - 첫 화면은 기간 그룹 타임라인이 기본값, 간트·카드그리드는 보조 토글 — [ADR-0008](adr/0008-timeline-layout.md)(2026-07-26 개정).
 - 공유 유입이 주 채널 → CSR SPA 유지하되 **OG 프리렌더 필수**(미구현) — [ADR-0001](adr/0001-tech-stack.md).
 - URL 자동 채움(단일 지시형 페치)은 자동 수집(대량 크롤링)과 별개 사안 — [ADR-0009](adr/0009-fetch-vs-crawl.md). SSRF·자원 상한·rate limit 필수.

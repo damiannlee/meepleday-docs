@@ -16,6 +16,7 @@
 1. 북마크 (인증 의존 — 구현 완료)
 2. ~~마감 임박 이메일 알림~~ — **M3 범위 아님**, [PRD §8.5](../prd.md#85-마감-임박-알림) 장기비전으로 이동. 스펙 스케치는 §2에 보존(재도입 시 참고용).
 3. 로그인 혜택 — 내 제보 현황·승인 알림
+4. ~~관심 게임(팔로우)~~ — **M3 범위 아님**, 게임당 평균 연결 이벤트 2건 이상 관측 후 착수 ([ADR-0013](../adr/0013-bookmark-vs-game-follow.md)). 추적 모델 전체는 [spec/tracking-model.md](tracking-model.md).
 
 ---
 
@@ -43,16 +44,12 @@
 **사용자 스토리**
 - 로그인 사용자는 관심 이벤트를 북마크/해제, 내 북마크 목록 조회.
 
-**엔티티**
-- `Bookmark`: user_id, event_id, createdAt. `(user_id, event_id)` unique.
+**엔티티·엔드포인트·행동 규칙은 [spec/tracking-model.md §1](tracking-model.md#1-북마크)** — 2026-08-02 추적 모델 확정으로 이관(중복 서술 방지).
 
-**엔드포인트(안)**
-- `POST /api/events/{id}/bookmark`, `DELETE /api/events/{id}/bookmark`, `GET /api/me/bookmarks`.
-
-**규칙**
-- 북마크 목록도 이벤트 상태는 저장 안 하고 파생([ADR-0004](../adr/0004-derived-status.md)) — 목록 조회 시 N+1 주의(배치 로딩).
+**M3 관점에서만 유효한 점**
+- 로그인 벽은 서비스 전체에서 여기 한 곳.
 - 목록 화면(S7)은 피드와 동일한 **기간 그룹 타임라인** 레이아웃 재사용 ([ADR-0008](../adr/0008-timeline-layout.md)).
-- 타 유저 자원 접근 차단 — 북마크 조회·삭제는 소유자 검증.
+- **관심 게임(팔로우)은 M3 범위 아님** — 게임당 평균 연결 이벤트 2건 이상 관측 후 착수 ([ADR-0013](../adr/0013-bookmark-vs-game-follow.md)). M3는 북마크만.
 
 ---
 
