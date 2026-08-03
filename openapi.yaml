@@ -170,6 +170,39 @@ paths:
           description: OK
       tags:
       - prefill-controller
+  /api/events/{eventId}/bookmark:
+    delete:
+      operationId: unbookmark
+      parameters:
+      - in: path
+        name: eventId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: No Content
+      tags:
+      - bookmark-controller
+    post:
+      operationId: bookmark
+      parameters:
+      - in: path
+        name: eventId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookmarkResponse"
+          description: OK
+      tags:
+      - bookmark-controller
   /api/events/{id}:
     get:
       operationId: getEvent
@@ -220,8 +253,77 @@ paths:
           description: OK
       tags:
       - auth-controller
+  /api/me/bookmarks:
+    get:
+      operationId: getMyBookmarks
+      parameters:
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - in: query
+        name: size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageBookmarkResponse"
+          description: OK
+      tags:
+      - bookmark-controller
+  /api/me/submissions:
+    get:
+      operationId: getMySubmissions
+      parameters:
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - in: query
+        name: size
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageEventResponse"
+          description: OK
+      tags:
+      - my-submissions-controller
 components:
   schemas:
+    BookmarkResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        event:
+          $ref: "#/components/schemas/EventResponse"
+        id:
+          type: integer
+          format: int64
+      required:
+      - createdAt
+      - event
+      - id
     EventModerationRequest:
       type: object
       properties:
@@ -418,6 +520,38 @@ components:
       - events
       - id
       - titleOriginal
+    PageBookmarkResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookmarkResponse"
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
     PageEventResponse:
       type: object
       properties:
